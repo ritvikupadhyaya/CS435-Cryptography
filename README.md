@@ -2,6 +2,7 @@
 ##Homework Grades:
 ###Homework 1
 Total - 18 / 20
+
 Individual Feedback:
 * Q1 - 5
 * Q2 - 4 (part b period 2 incorrect)
@@ -11,6 +12,7 @@ Individual Feedback:
 
 ###Homework 2
 Total - 19.5 / 20
+
 Individual Feedback:
 * Q1 - 5
 * Q2 - 5
