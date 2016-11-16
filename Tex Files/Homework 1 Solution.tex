@@ -1,0 +1,145 @@
+\documentclass{article}
+\usepackage[letterpaper, margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{color}
+\usepackage{soul}
+
+
+\newcommand\tab[1][1cm]{\hspace*{#1}}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=black,
+    linktoc=all
+}
+
+\title{\Huge Homework 1
+		\\\LARGE Cryptography
+		\\\LARGE CS 435
+		\vspace{2pc}}
+
+\author{Ritvik Upadhyaya}
+\date{}
+
+\begin{document}
+
+	\maketitle
+
+	\newpage
+
+	\section*{Solution 1}
+        We know that the length of the ciphertext = 17.\\
+        Since the contents of the plain text are only two days of the week, let's start by looking at the length of each day.
+        \begin{table}[H]
+            \centering
+            \caption{Day Length Table}
+            \label{tab:table1}
+
+            \begin{tabular}{|c|c|}
+
+                \toprule
+                Day & Length\\
+                \midrule
+                Monday & 6\\
+                \hline
+                Tuesday & 7\\
+                \hline
+                Wednesday & 9\\
+                \hline
+                Thursday & 8\\
+                \hline
+                Friday & 6\\
+                \hline
+                Saturday & 8\\
+                \hline
+                Sunday & 6\\
+                \hline
+            \end{tabular}
+        \end{table}
+        The only combination that will work should have a plain text of length 17. Assuming that there are no spaces in between, the only combinations that will work are:\\
+        \textbf{
+        \tab \tab \tab \tab \tab \textbullet{}Wednesday and Thursday\\
+        \tab \tab \tab \tab \tab \tab \tab OR\\
+        \tab \tab \tab \tab \tab \textbullet{}Wednesday and Saturday}\\
+        (The order of the two days can be reversed from what written above.)\\
+        Next, we know that all the days end with the phrase 'day'. And we know that irrespective of the order of the words, the last three letter of the plain text have to be 'day' as well. Therefore using the formula $$m\textsubscript{i} = (c\textsubscript{i}-k\textsubscript{i})\; mod\; 26$$\\
+        \tab \tab d = 3, a = 0, y = 24.\\
+        \tab \tab r = 17, v = 21, c = 2.\\
+        From the equation:\\
+        \tab \tab 3 = {17 - $k_{14}$} mod 26 $=> k_{14}$ = 26n + 14 = 14 $=>$ O\\
+        \tab \tab 0 = {21 - $k_{15}$} mod 26 $=> k_{15}$ = 26n + 21 = 21 $=>$ V\\
+        \tab \tab 24 = {2 - $k_{16}$} mod 26 $=> k_{16}$ = 26n - 22 = 4 $=>$ E\\
+        The last three letters of the key are \textbf{OVE}.\\
+        Using the same equations over the entire plaintext combinations and the given cipher text, we see that the possible keys are:
+        \begin{table}[H]
+            \centering
+            \caption{Key to Combinations}
+            \label{tab:table2}
+
+            \begin{tabular}{|c|c|}
+
+                \toprule
+                Plaintext & Key\\
+                \midrule
+                WednesdayThursday & DOCTORSTRZGFHKOVE\\
+                \hline
+                ThursdayWednesday & GLLPAGVVTOKMUKOVE\\
+                \hline
+                WednesdaySaturday & \textcolor{red}{DOCTORSTRANGELOVE}\\
+                \hline
+                SaturdayWednesday & HSMMBGVVTOKMUKOVE\\
+                \hline
+            \end{tabular}
+        \end{table}
+        
+        So we see that the plain text is \textbf{wednesdaysaturday} as the key is a combination of english words - \textit{Doctor, Strange, Love.}
+    \section*{Solution 2}
+        \subsection*{Part A}
+            \tab If the attacker knows that the password is either \textbf{abcd}, or \textbf{bedg} and that the user has encrypted the password using shift cyper, it is easy for the attacker to find out which password is actually the correct one. Because in shift cypher, the shift is constant for all the characters in the ciphertext, if the ciphertext has characters progressing by only 1 i.e something like pqrs, it is almost positive that the password is 'abcd'.\\
+            \tab If its not abcd, then we know that the password is 'bedg'. To confirm, the attacker can look at the difference in the characters in the ciphertext. For example, the attacker can check if the character in ciphertext for e is 3 more than that for the character for b in ciphertext and so on. If all the checks are valid, then we can say for sure that the password was 'bedg'.\\
+        \subsection*{Part B}
+            \subsection*{Period 2}
+                \tab In this case, the first and the third character in the ciphertext will be off by the same amount since the key will only be of length two. SO the attacker can look at the ciphertext and see if the first and the third character are off by 2 (the difference between 'a' and 'c' of 'abcd'). If so, then the password is indeed 'abcd' or else it is 'bedg'.
+            \subsection*{Period 3}
+                \tab Like with period 2, the attacker can see what the password is if the plaintext is crypted using vigenere cipher. The difference would just be that the attacker will have to look at the first and the 4th characters in the ciphertext. If the two are off by 3 ('d'-'a' = 3). If so then the password is 'abcd' else it is 'bedg'.
+            \subsection*{Period 4}
+                \tab The attacker will be unable to decrypt the ciphertext in this case. Since the plain text is only 4 character long, the key with period 4 implies that there are no two characters in the ciphertext that are shifted by the same amount. Hence all 4 characters can be shifted by any random amount between 0-25. There is no way to tell the language of the ciphertext as well because the string is too short to perform any sort of analysis and there is no repeat in the 4 characters in the plain text.
+
+    \section*{Solution 3}
+        \textbf{To prove:} If the encryption scheme $\Pi = (Gen, Enc, Dec)$ is perfectly secret, then it is perfectly indistinguishable.\\
+        \tab According to the definition, we know that:\\\\
+        Perfectly Indistinguishable $\Rightarrow Pr[PrivK_{\mathcal{A},\Pi}^{eav} = 1] = \frac{1}{2}$\\\\
+        Perfectly Secret $\Rightarrow Pr[M = m | C = c] = Pr[M = m]$ where $Pr[C = c] > 0$\\
+        Which means $Pr[Enc_k(m_0) = c] = Pr[Enc_k(m_1) = c]$\\
+        For any two messages $m_0$ and $m_1$ where $m_0, m_1 \in \mathcal{M}$ and some c $\in \mathcal{C}$\\\\
+        \[Pr[PrivK_{\mathcal{A},\Pi}^{eav} = 1] = Pr[b = b']\]
+        \[= Pr[b = 0]\cdot Pr[PrivK_{\mathcal{A},\Pi}^{eav} = 1|b = 0] + Pr[b = 1]\cdot Pr[PrivK_{\mathcal{A},\Pi}^{eav} = 1|b = 1]\]
+        \[= \frac{1}{2}(Pr[\mathcal{A}\; outputs\; 0|b=0]+Pr[\mathcal{A}\; outputs\; 1|b=1])\tab \{Pr[b = 0] = Pr[b = 1] = \frac{1}{2}\}\]
+        Let $\mathcal{A}$ outputs 0 in c $\in$ some $C_0$ and 1 in c $\in$ some $C_1$. Where $C_0$ and $C_1$ are subsets of C. Then we see that
+        \[= \frac{1}{2}(\sum_{C_0}Pr[c \in C_0 | m = m_0] + \sum_{C_1}Pr[c \in C_1 | m = m_1])\]
+        \[= \frac{1}{2}(\sum_{C_0}Pr[c \in C_0 | m = m_1] + \sum_{C_1}Pr[c \in C_1 | m = m_1])\]
+        \[= \frac{1}{2}(\sum_{C}Pr[c \in C | m = m_1]) = \frac{1}{2}\]
+        Since $\mathcal{A}$ will have to output either a 1 or 0 depending on the message and the ciphertext that message corresponds to. We see that the sum of probability of A outputting 0 or 1 will be the same as, $Pr[c \in C | m = m_1]$ which is equal to 1.\\
+        We see that the above expression $Pr[PrivK_{\mathcal{A},\Pi}^{eav} = 1] = \frac{1}{2}$\\
+        This proves that if the scheme is perfectly secret then it is perfectly indistinguishable.
+
+    \section*{Solution 4}
+        \subsection*{Part a.}
+            Perfect secrecy is when the prior belief is the same as the posterior belief. Which implies that the cipher text should not change the probablity from the prior belief we have of the messages.
+            The given scheme is a variant of the shift cypher.\\
+            For a message length $\geq$ 2.\\
+            Let us assume, $Enc_k(m_1)$ = c.\\
+            However, for all k $\in$ K we have $Enc_k(m_2) \neq c$, because the sum of $m_2$ and $k$ will be different when mod by 5, as compared to $m_1$ and $k$. Actually for certain cases like $m_2 = 0$, $c = 3$ and $k = 0$, $Pr[Enc_k(m_2) = c] = 0$ even though the $Pr[Enc_k(m_1) = c] \neq 0$.
+            Hence this scheme is \textbf{not perfectly secret}.
+        \subsection*{Part b.}
+            This scheme is a bitwise XOR of the entire message using a key half the length of the message. This is \textbf{not perfectly secret}. We see that,\\
+            \[c_{[1,..,n]} = m_{[1,..,n]} \oplus k\]
+            \[c_{[n+1,..,2n]} = m_{[n+1,..,2n]} \oplus k\]
+            And we can then see that,
+            \[m_{[1,..,n]} \oplus m_{[n+1,..,2n]} = c_{[1,..,n]} \oplus c_{[n+1,..,2n]}\]
+            This means that $c_{[1,..,2n]}$ gives us the $\oplus$ of the original plaintext. This proves that the scheme is \textbf{not perfectly secret}.
+\end{document}
